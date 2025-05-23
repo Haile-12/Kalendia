@@ -1,0 +1,99 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.kalendia">
+
+    <!-- Permissions -->
+    <uses-permission android:name="com.android.permission.SET_ALARM"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"
+    android:maxSdkVersion="32"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    <application
+        android:label="Kalendia"
+        android:icon="@mipmap/ic_launcher"  
+        android:allowBackup="true"
+        android:enableOnBackInvokedCallback="true"
+        android:theme="@style/LaunchTheme">
+
+        <!-- MainActivity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <!-- Flutter Embedding -->
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2"/>
+
+        <!-- Notification Service -->
+        <service
+            android:name="com.dexterous.hal.builder.NotificationService"
+            android:exported="false"/>
+
+        <!-- Boot Receiver -->
+        <receiver
+            android:name="com.dexterous.hal.builder.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- Alarm Receiver -->
+        <receiver android:name="com.dexterous.honeywell.HoneywellBootReceiver" />
+        <receiver
+            android:name="com.dexterous.hal.builder.AlarmReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.dexterous.hal.ALARM_ACTION"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- Restart Receiver -->
+        <receiver
+            android:name="com.dexterous.hal.builder.RestartReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+                <action android:name="android.intent.action.REBOOT"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
+    </application>
+
+    <!-- Required Queries for URL launching (Android 11+) -->
+    <queries>
+        <!-- Text processing intent -->
+        <intent>
+            <action android:name="android.intent.action.PROCESS_TEXT"/>
+            <data android:mimeType="text/plain"/>
+        </intent>
+
+        <!-- Social and browser packages -->
+        <package android:name="org.telegram.messenger"/>
+        <package android:name="com.facebook.katana"/>
+        <package android:name="com.instagram.android"/>
+        <package android:name="com.android.chrome"/>
+        <package android:name="com.google.android.apps.chrome"/>
+    </queries>
+</manifest>
